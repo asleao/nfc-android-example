@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.txt_messagem
+import qualityautomacao.com.nfceexample.services.NfcService
 
 
 class MainActivity : AppCompatActivity() {
@@ -55,8 +56,14 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        val tag = intent?.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        val action = intent.getAction()
+        val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+        val techList = tag?.getTechList()
+        val mNfcService = NfcService(tag)
+        val tagContent = mNfcService.readTag(tag)
     }
+
+
 }
