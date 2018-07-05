@@ -17,10 +17,10 @@ class NfcService(tag: Tag) : INfcService {
     }
 
     override fun readTag(tag: Tag): String {
-       return mNfcDao.readTag(tag)
+        return mNfcDao.readTag(tag)
     }
 
-    override fun writeTag() {
-        mNfcDao.writeTag()
+    override fun writeTag(tag: Tag, textString: String) {
+        mNfcDao.writeTag(tag, textString)
     }
 }

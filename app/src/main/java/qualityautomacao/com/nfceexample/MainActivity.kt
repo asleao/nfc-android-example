@@ -2,6 +2,7 @@ package qualityautomacao.com.nfceexample
 
 import android.app.PendingIntent
 import android.content.Intent
+import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.os.Bundle
@@ -62,7 +63,12 @@ class MainActivity : AppCompatActivity() {
         val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
         val techList = tag?.getTechList()
         val mNfcService = NfcService(tag)
+
+//        mNfcService.writeTag(tag,"webpostoPay")
+
         val tagContent = mNfcService.readTag(tag)
+
+        txt_messagem.setText(tagContent)
     }
 
 
