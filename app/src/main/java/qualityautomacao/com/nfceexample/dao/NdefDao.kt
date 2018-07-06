@@ -37,7 +37,7 @@ class NdefDao : INfcDao {
 
         return contentString
     }
-
+    //Todo function not writing properly
     override fun writeTag(tag: Tag, textString: String) {
         val language = "en"
         val stringBytes = textString.toByteArray()

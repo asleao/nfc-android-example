@@ -17,6 +17,7 @@ class IsoDepDao : INfcDao {
         val tagIso = IsoDep.get(tag)
 
         tagIso.connect()
+
         var result = tagIso.transceive(SELECT)
         if (!(result[0] == 0x90.toByte() && result[1] == 0x00.toByte()))
             throw IOException("could not select applet")

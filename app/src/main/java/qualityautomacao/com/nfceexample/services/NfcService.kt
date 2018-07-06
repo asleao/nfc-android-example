@@ -2,8 +2,10 @@ package qualityautomacao.com.nfceexample.services
 
 import android.nfc.Tag
 import android.nfc.tech.IsoDep
+import android.nfc.tech.MifareClassic
 import qualityautomacao.com.nfceexample.dao.INfcDao
 import qualityautomacao.com.nfceexample.dao.IsoDepDao
+import qualityautomacao.com.nfceexample.dao.MifareClassicDao
 import qualityautomacao.com.nfceexample.dao.NdefDao
 
 class NfcService(tag: Tag) : INfcService {
@@ -12,6 +14,7 @@ class NfcService(tag: Tag) : INfcService {
     init {
         mNfcDao = when {
             IsoDep.get(tag) != null -> IsoDepDao()
+            MifareClassic.get(tag) != null -> MifareClassicDao()
             else -> NdefDao()
         }
     }

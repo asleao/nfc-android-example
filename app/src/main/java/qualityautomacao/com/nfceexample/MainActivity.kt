@@ -2,7 +2,8 @@ package qualityautomacao.com.nfceexample
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.nfc.NdefMessage
+import android.content.IntentFilter
+import android.content.IntentFilter.MalformedMimeTypeException
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.os.Bundle
@@ -10,13 +11,15 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.txt_messagem
 import qualityautomacao.com.nfceexample.services.NfcService
+import android.nfc.tech.MifareClassic
+import android.nfc.tech.TagTechnology
 
 
 class MainActivity : AppCompatActivity() {
-    val TAG = "NfcDemo"
 
     private var mNfcAdapter: NfcAdapter? = null
     private var mPendingIntent: PendingIntent? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main);
@@ -25,10 +28,8 @@ class MainActivity : AppCompatActivity() {
 
         if (mNfcAdapter == null) {
             // Stop here, we definitely need NFC
-            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-
+            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show()
+            finish()
         }
 
         if (!checkNotNull(mNfcAdapter?.isEnabled())) {
@@ -37,14 +38,16 @@ class MainActivity : AppCompatActivity() {
             txt_messagem.setText("NFC habilitado")
         }
 
+        val ndef = IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)
+
+        try {
+            ndef.addDataType("*/*")
+        } catch (e: MalformedMimeTypeException) {
+            throw RuntimeException("fail", e)
+        }
+
         mPendingIntent = PendingIntent.getActivity(
                 this, 0, Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0)
-
-//        handleIntent(getIntent())
-    }
-
-    fun handleIntent(intent: Intent) {
-        // TODO: handle Intent
     }
 
     override fun onResume() {
