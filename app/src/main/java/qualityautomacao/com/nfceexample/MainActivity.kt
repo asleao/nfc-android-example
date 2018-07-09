@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.txt_messagem
 import qualityautomacao.com.nfceexample.services.NfcService
+import qualityautomacao.com.nfceexample.tasks.SearchTagTask
 import java.lang.ref.WeakReference
 
 
@@ -72,8 +73,6 @@ class MainActivity : AppCompatActivity() {
         val techList = tag?.getTechList()
         readTag(tag)
 //        mNfcService.writeTag(tag,"webpostoPay")
-
-
     }
 
     private fun readTag(tag: Tag) {
@@ -83,34 +82,6 @@ class MainActivity : AppCompatActivity() {
 
     fun setMessage(result: String) {
         txt_messagem.setText(result)
-    }
-
-    class SearchTagTask(activity: MainActivity) : AsyncTask<Tag, Any, String>() {
-        var activityRef: WeakReference<MainActivity>
-
-        init {
-            activityRef = WeakReference(activity)
-        }
-
-        override fun doInBackground(vararg params: Tag): String {
-            var tagContent = "Tag is empty."
-            try {
-                val tag = params[0]
-                val mNfcService = NfcService(tag)
-                tagContent = mNfcService.readTag(tag)
-                return tagContent
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            return tagContent
-        }
-
-        override fun onPostExecute(result: String) {
-            val activity = activityRef.get()
-            if (activity != null) {
-                activity.setMessage(result);
-            }
-        }
     }
 
 }
