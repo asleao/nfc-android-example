@@ -2,18 +2,14 @@ package qualityautomacao.com.nfceexample
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.IntentFilter.MalformedMimeTypeException
 import android.nfc.NfcAdapter
 import android.nfc.Tag
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.txt_messagem
-import qualityautomacao.com.nfceexample.services.NfcService
+import qualityautomacao.com.nfceexample.dto.TagDto
 import qualityautomacao.com.nfceexample.tasks.SearchTagTask
-import java.lang.ref.WeakReference
 
 
 class MainActivity : AppCompatActivity() {
@@ -63,6 +59,10 @@ class MainActivity : AppCompatActivity() {
         val action = intent.getAction()
         val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
         val techList = tag?.getTechList()
+        val tagDto = TagDto(tag.id, techList)
+
+        tagDto.uuid()
+
         readTag(tag)
 //        mNfcService.writeTag(tag,"webpostoPay")
     }
@@ -75,5 +75,6 @@ class MainActivity : AppCompatActivity() {
     fun setMessageFromSearchTask(result: String) {
         txt_messagem.setText(result)
     }
+
 
 }
