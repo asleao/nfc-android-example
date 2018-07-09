@@ -1,14 +1,13 @@
 package qualityautomacao.com.nfceexample.tasks
 
-import android.app.Activity
 import android.nfc.Tag
 import android.os.AsyncTask
 import qualityautomacao.com.nfceexample.MainActivity
 import qualityautomacao.com.nfceexample.services.NfcService
 import java.lang.ref.WeakReference
 
-class SearchTagTask(activity: Activity) : AsyncTask<Tag, Any, String>() {
-    var activityRef: WeakReference<Activity>
+class SearchTagTask(activity: MainActivity) : AsyncTask<Tag, Any, String>() {
+    var activityRef: WeakReference<MainActivity>
 
     init {
         activityRef = WeakReference(activity)
@@ -28,7 +27,7 @@ class SearchTagTask(activity: Activity) : AsyncTask<Tag, Any, String>() {
     }
 
     override fun onPostExecute(result: String) {
-        val activity = activityRef.get() as? MainActivity
+        val activity = activityRef.get()
         if (activity != null) {
             activity.setMessage(result)
         }
