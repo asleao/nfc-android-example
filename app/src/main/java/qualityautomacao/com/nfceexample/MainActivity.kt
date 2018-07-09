@@ -60,8 +60,8 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         mNfcAdapter?.disableForegroundDispatch(this)
         if (task != null) {
-            task?.cancel(true);
-            task = null;
+            task?.cancel(true)
+            task = null
         }
         super.onPause()
     }
