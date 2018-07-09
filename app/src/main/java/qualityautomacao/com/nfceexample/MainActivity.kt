@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         searchTagTask.execute(tag)
     }
 
-    fun setMessage(result: String) {
+    fun setMessageFromSearchTask(result: String) {
         txt_messagem.setText(result)
     }
 

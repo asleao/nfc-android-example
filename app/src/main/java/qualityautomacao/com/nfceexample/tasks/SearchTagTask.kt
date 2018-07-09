@@ -29,7 +29,7 @@ class SearchTagTask(activity: MainActivity) : AsyncTask<Tag, Any, String>() {
     override fun onPostExecute(result: String) {
         val activity = activityRef.get()
         if (activity != null) {
-            activity.setMessage(result)
+            activity.setMessageFromSearchTask(result)
         }
     }
 }
