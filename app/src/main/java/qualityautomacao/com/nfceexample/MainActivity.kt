@@ -40,14 +40,6 @@ class MainActivity : AppCompatActivity() {
             txt_messagem.setText("NFC habilitado")
         }
 
-        val ndef = IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)
-
-        try {
-            ndef.addDataType("*/*")
-        } catch (e: MalformedMimeTypeException) {
-            throw RuntimeException("fail", e)
-        }
-
         mPendingIntent = PendingIntent.getActivity(
                 this, 0, Intent(this, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0)
     }
