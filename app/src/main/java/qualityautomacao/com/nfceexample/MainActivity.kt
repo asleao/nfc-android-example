@@ -6,19 +6,20 @@ import android.content.IntentFilter
 import android.content.IntentFilter.MalformedMimeTypeException
 import android.nfc.NfcAdapter
 import android.nfc.Tag
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.txt_messagem
 import qualityautomacao.com.nfceexample.services.NfcService
-import android.nfc.tech.MifareClassic
-import android.nfc.tech.TagTechnology
+import java.lang.ref.WeakReference
 
 
 class MainActivity : AppCompatActivity() {
 
     private var mNfcAdapter: NfcAdapter? = null
     private var mPendingIntent: PendingIntent? = null
+    private var task: SearchTagTask? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +58,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         mNfcAdapter?.disableForegroundDispatch(this)
+        if (task != null) {
+            task?.cancel(true);
+            task = null;
+        }
         super.onPause()
     }
 
@@ -65,14 +70,47 @@ class MainActivity : AppCompatActivity() {
         val action = intent.getAction()
         val tag = intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
         val techList = tag?.getTechList()
-        val mNfcService = NfcService(tag)
-
+        readTag(tag)
 //        mNfcService.writeTag(tag,"webpostoPay")
 
-        val tagContent = mNfcService.readTag(tag)
 
-        txt_messagem.setText(tagContent)
     }
 
+    private fun readTag(tag: Tag) {
+        val searchTagTask = SearchTagTask(this)
+        searchTagTask.execute(tag)
+    }
+
+    fun setMessage(result: String) {
+        txt_messagem.setText(result)
+    }
+
+    class SearchTagTask(activity: MainActivity) : AsyncTask<Tag, Any, String>() {
+        var activityRef: WeakReference<MainActivity>
+
+        init {
+            activityRef = WeakReference(activity)
+        }
+
+        override fun doInBackground(vararg params: Tag): String {
+            var tagContent = "Tag is empty."
+            try {
+                val tag = params[0]
+                val mNfcService = NfcService(tag)
+                tagContent = mNfcService.readTag(tag)
+                return tagContent
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return tagContent
+        }
+
+        override fun onPostExecute(result: String) {
+            val activity = activityRef.get()
+            if (activity != null) {
+                activity.setMessage(result);
+            }
+        }
+    }
 
 }
