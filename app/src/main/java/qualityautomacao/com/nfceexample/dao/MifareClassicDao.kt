@@ -33,14 +33,16 @@ class MifareClassicDao : INfcDao {
 //                return String(payload, Charset.forName("US-ASCII"))
             }
         } catch (e: IOException) {
-            Log.e("MifareClassic", "IOException while writing MifareClassic message...", e);
+            Log.e("MifareClassic", "IOException while reading MifareClassic message...", e)
+            return "IOException while reading MifareClassic message..."
 
         } finally {
             if (mifare != null) {
                 try {
-                    mifare.close();
+                    mifare.close()
                 } catch (e: IOException) {
                     Log.e("MifareClassic", "Error closing tag...", e)
+                    return "Error closing tag..."
                 }
             }
         }
